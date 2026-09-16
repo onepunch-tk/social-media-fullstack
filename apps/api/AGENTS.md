@@ -68,7 +68,7 @@ bun run --filter @social/api build           # nest build → dist/
 bun run --filter @social/api dev             # nest start --watch
 bun run --filter @social/api typecheck       # tsc --noEmit -p tsconfig.json (src + test + 설정 파일)
 bun run --filter @social/api lint            # biome check .
-bun run --filter @social/api test            # vitest — 소스 옆 *.spec.ts
+bun run --filter @social/api test            # vitest 단위(소스 옆 *.spec.ts) + 이어서 e2e — 실 DB 필요
 bun run --filter @social/api test:e2e        # vitest --config vitest.config.e2e.ts — test/*.e2e-spec.ts, 실 DB
 node dist/main.js                            # 빌드 산출물 직접 기동 (cwd apps/api, .env 필요)
 ```
