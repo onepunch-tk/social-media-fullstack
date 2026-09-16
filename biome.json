@@ -13,7 +13,8 @@
       "!!**/.expo",
       "!!**/coverage",
       "!!**/expo-env.d.ts",
-      "!!**/.turbo"
+      "!!**/.turbo",
+      "!!apps/mobile/assets"
     ]
   },
   "overrides": [
