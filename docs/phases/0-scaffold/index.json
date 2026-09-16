@@ -1,0 +1,99 @@
+{
+  "project": "social-media-fullstack",
+  "phase": "scaffold",
+  "steps": [
+    {
+      "step": 0,
+      "name": "monorepo-root",
+      "status": "pending",
+      "read_docs": [
+        "docs/PRD.md",
+        "docs/ARCHITECTURE.md",
+        "docs/adr/ADR-001.md",
+        "docs/adr/ADR-002.md",
+        "docs/adr/ADR-009.md",
+        "docs/adr/ADR-010.md",
+        "docs/adr/ADR-012.md",
+        "docs/conventions/typescript.md"
+      ]
+    },
+    {
+      "step": 1,
+      "name": "schemas-package",
+      "status": "pending",
+      "read_docs": [
+        "docs/PRD.md",
+        "docs/ARCHITECTURE.md",
+        "docs/adr/ADR-002.md",
+        "docs/adr/ADR-003.md",
+        "docs/adr/ADR-010.md",
+        "docs/adr/ADR-011.md",
+        "packages/typescript-config/base.json",
+        "turbo.json",
+        "AGENTS.md",
+        "docs/conventions/typescript.md"
+      ]
+    },
+    {
+      "step": 2,
+      "name": "api-app",
+      "status": "pending",
+      "read_docs": [
+        "docs/PRD.md",
+        "docs/ARCHITECTURE.md",
+        "docs/adr/ADR-003.md",
+        "docs/adr/ADR-004.md",
+        "docs/adr/ADR-005.md",
+        "docs/adr/ADR-006.md",
+        "docs/adr/ADR-011.md",
+        "packages/schemas/src/health.schema.ts",
+        "packages/schemas/package.json",
+        "turbo.json",
+        "biome.json",
+        "AGENTS.md",
+        "docs/conventions/nestjs.md",
+        "docs/conventions/typescript.md"
+      ]
+    },
+    {
+      "step": 3,
+      "name": "mobile-app",
+      "status": "pending",
+      "read_docs": [
+        "docs/PRD.md",
+        "docs/ARCHITECTURE.md",
+        "docs/adr/ADR-002.md",
+        "docs/adr/ADR-007.md",
+        "docs/adr/ADR-008.md",
+        "docs/adr/ADR-011.md",
+        "packages/schemas/src/health.schema.ts",
+        "apps/api/src/health/presentation/health.controller.ts",
+        "apps/api/src/health/presentation/dtos/health-response.dto.ts",
+        "turbo.json",
+        "biome.json",
+        "AGENTS.md",
+        "docs/conventions/expo.md",
+        "docs/conventions/react.md",
+        "docs/conventions/typescript.md"
+      ]
+    },
+    {
+      "step": 4,
+      "name": "integration-gate",
+      "status": "pending",
+      "read_docs": [
+        "docs/PRD.md",
+        "docs/ARCHITECTURE.md",
+        "docs/adr/ADR-001.md",
+        "docs/adr/ADR-012.md",
+        "AGENTS.md",
+        "apps/api/AGENTS.md",
+        "apps/mobile/AGENTS.md",
+        "packages/schemas/AGENTS.md",
+        "turbo.json",
+        "package.json",
+        "docs/conventions/typescript.md"
+      ]
+    }
+  ]
+}

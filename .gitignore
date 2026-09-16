@@ -1,0 +1,9 @@
+# === tk-harness (auto-added) — 렌더러/런타임 산출물 ===
+# 렌더러 덮어쓰기 백업
+docs/**/*.bak.*
+# 렌더러 입력 JSON: prd-input.json만 정본으로 커밋, 나머지는 1회용
+docs/.harness/*-input.json
+!docs/.harness/prd-input.json
+# phase 실행 런타임 산출물 (durable manifest인 index.json·step{N}.md는 추적)
+docs/phases/**/step*-output.json
+docs/phases/**/phase*-output.json
