@@ -16,10 +16,10 @@ apps/api/
 ├── tsconfig.build.json     # rootDir src → dist, spec/test 제외
 ├── vitest.config.ts / vitest.config.e2e.ts   # vite-tsconfig-paths로 별칭 해석
 ├── drizzle.config.ts       # 설정만 — generate/migrate는 이번 phase 범위 밖
-├── .env.example            # DATABASE_URL, PORT (.env는 커밋 금지)
+├── .env.example            # DATABASE_URL, PORT, CORS_ORIGIN (.env는 커밋 금지)
 ├── scripts/ensure-db.sh    # docker exec postgres psql — social_media DB 멱등 생성
 ├── src/
-│   ├── main.ts             # bootstrap 전용: ValidationPipe, enableShutdownHooks, listen
+│   ├── main.ts             # bootstrap 전용: enableCors, ValidationPipe, enableShutdownHooks, listen
 │   ├── app.module.ts       # 전역 1회 등록(ConfigModule·CqrsModule.forRoot·DrizzleModule) + 슬라이스 조립
 │   ├── shared/
 │   │   ├── domain/                                  # 자리 표시
@@ -76,9 +76,9 @@ node dist/main.js                            # 빌드 산출물 직접 기동 (c
 ## 환경
 
 - `.env.example`만 커밋한다. `.env`는 루트 `.gitignore`가 제외한다 — 로컬에서 `cp .env.example .env`.
-- `DATABASE_URL`(`z.url()`)·`PORT`(기본 3000)는 `validateEnv`가 부팅 시 검증한다. 누락·형식 오류면
-  `ZodError`로 즉시 종료(exit 1)한다. `ConfigModule.forRoot`는 `process.cwd()`의 `.env`를 읽으므로 명령은
-  `apps/api`에서 실행한다(`bun run --filter`는 자동으로 그렇게 한다).
+- `DATABASE_URL`(`z.url()`)·`PORT`(기본 3000)·`CORS_ORIGIN`(콤마 구분 origin 목록, 필수)은 `validateEnv`가
+  부팅 시 검증한다. 누락·형식 오류면 `ZodError`로 즉시 종료(exit 1)한다. `ConfigModule.forRoot`는
+  `process.cwd()`의 `.env`를 읽으므로 명령은 `apps/api`에서 실행한다(`bun run --filter`는 자동으로 그렇게 한다).
 - 로컬 PostgreSQL 16은 docker 컨테이너 `postgres`(localhost:5432, postgres/postgres). 로컬 `psql`이 없어
   `scripts/ensure-db.sh`가 `docker exec postgres psql`로 접근한다.
 - 코드에서 `process.env`를 직접 읽지 마라 — `ConfigService<Env, true>` 경유(예외: `drizzle.config.ts`).
