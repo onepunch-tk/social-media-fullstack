@@ -7,3 +7,15 @@ docs/.harness/*-input.json
 # phase 실행 런타임 산출물 (durable manifest인 index.json·step{N}.md는 추적)
 docs/phases/**/step*-output.json
 docs/phases/**/phase*-output.json
+
+# === 워크스페이스 생성물·환경 ===
+node_modules/
+dist/
+coverage/
+.turbo/
+.expo/
+expo-env.d.ts
+.env
+.env.*
+!.env.example
+.DS_Store

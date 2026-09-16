@@ -1,0 +1,8 @@
+{
+  "name": "@social/biome-config",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./biome": "./base.json"
+  }
+}

@@ -331,9 +331,7 @@
       "response_200": {
         "status": "ok",
         "timestamp": "<ISO>",
-        "checks": [
-          { "name": "database", "status": "ok", "latencyMs": "<number>" }
-        ]
+        "checks": [{ "name": "database", "status": "ok", "latencyMs": "<number>" }]
       },
       "error_codes": [503]
     }
@@ -344,40 +342,108 @@
         "name": "HealthResponse",
         "description": "비영속 값 객체(와이어 계약). `GET /health` 응답 전체. 저장하지 않으며 `packages/schemas`의 `HealthResponseSchema`가 단일 정의",
         "fields": [
-          { "name": "status", "type": "'ok' | 'degraded'", "constraints": "required, enum", "description": "전체 상태. 하나라도 fail이면 degraded" },
-          { "name": "timestamp", "type": "string", "constraints": "required, ISO 8601 datetime", "description": "응답 생성 시각" },
-          { "name": "checks", "type": "HealthCheck[]", "constraints": "required, 빈 배열 허용", "description": "개별 check 결과 목록" }
+          {
+            "name": "status",
+            "type": "'ok' | 'degraded'",
+            "constraints": "required, enum",
+            "description": "전체 상태. 하나라도 fail이면 degraded"
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "constraints": "required, ISO 8601 datetime",
+            "description": "응답 생성 시각"
+          },
+          {
+            "name": "checks",
+            "type": "HealthCheck[]",
+            "constraints": "required, 빈 배열 허용",
+            "description": "개별 check 결과 목록"
+          }
         ]
       },
       {
         "name": "HealthCheck",
         "description": "비영속 값 객체(와이어 계약). 개별 check 결과. `packages/schemas`의 `HealthCheckSchema`가 단일 정의",
         "fields": [
-          { "name": "name", "type": "string", "constraints": "required", "description": "check 식별 이름(예: `database`)" },
-          { "name": "status", "type": "'ok' | 'fail'", "constraints": "required, enum", "description": "check 결과" },
-          { "name": "latencyMs", "type": "number", "constraints": "optional, ≥ 0", "description": "check 소요 시간(ms)" }
+          {
+            "name": "name",
+            "type": "string",
+            "constraints": "required",
+            "description": "check 식별 이름(예: `database`)"
+          },
+          {
+            "name": "status",
+            "type": "'ok' | 'fail'",
+            "constraints": "required, enum",
+            "description": "check 결과"
+          },
+          {
+            "name": "latencyMs",
+            "type": "number",
+            "constraints": "optional, ≥ 0",
+            "description": "check 소요 시간(ms)"
+          }
         ]
       }
     ],
-    "relationships": [
-      "HealthResponse 1 — N HealthCheck (`checks[]`에 값으로 포함; 영속성 없음)"
-    ],
+    "relationships": ["HealthResponse 1 — N HealthCheck (`checks[]`에 값으로 포함; 영속성 없음)"],
     "storage_strategy": {
       "server": "PostgreSQL 16 (drizzle-orm ~0.45 + postgres.js), 이번 phase 테이블 0",
       "client": "없음 — TanStack Query 메모리 캐시만",
       "cache": "TanStack Query staleTime 기본"
     },
     "glossary": [
-      { "term": "Workspace", "definition": "bun workspaces + Turborepo로 묶인 저장소 전체(`apps/*`, `packages/*`)", "synonyms": ["모노레포", "레포"] },
-      { "term": "App", "definition": "실행 가능한 배포 단위(`apps/mobile`, `apps/api`)", "synonyms": ["애플리케이션"] },
-      { "term": "Package", "definition": "App이 소비하는 내부 라이브러리(`packages/schemas`, `packages/typescript-config`, `packages/biome-config`)", "synonyms": ["공통 라이브러리", "내부 패키지"] },
-      { "term": "Schema", "definition": "`packages/schemas`의 zod 와이어 계약 + 추론 타입. DB 테이블 정의가 아님", "synonyms": ["공통 스키마", "와이어 계약"] },
-      { "term": "영속성 스키마", "definition": "drizzle 테이블 정의(`apps/api/src/shared/infrastructure/database/drizzle/schema/`)", "synonyms": ["DB 스키마", "drizzle schema"] },
-      { "term": "DTO", "definition": "class-validator/class-transformer 요청·응답 클래스. `apps/api` presentation 전용, Schema 추론 타입을 implements", "synonyms": ["요청 DTO", "응답 DTO"] },
-      { "term": "Health", "definition": "DB ping을 포함한 API 상태 응답 `{status, timestamp, checks[]}`", "synonyms": ["헬스체크"] },
-      { "term": "Vertical slice", "definition": "한 관심사를 CA 4레이어(domain/application/infrastructure/presentation)로 접은 디렉터리(`src/health/`) — 미래 바운디드 컨텍스트의 템플릿", "synonyms": ["슬라이스", "도메인 디렉터리"] },
-      { "term": "Routing shell", "definition": "`apps/mobile/src/app/` — named re-export만 두는 expo-router 라우트 파일", "synonyms": ["라우트 셸"] },
-      { "term": "Agent doc", "definition": "각 중요 root의 `AGENTS.md`(실체) + `CLAUDE.md`(AGENTS.md를 가리키는 한 줄)", "synonyms": ["에이전트 문서"] }
+      {
+        "term": "Workspace",
+        "definition": "bun workspaces + Turborepo로 묶인 저장소 전체(`apps/*`, `packages/*`)",
+        "synonyms": ["모노레포", "레포"]
+      },
+      {
+        "term": "App",
+        "definition": "실행 가능한 배포 단위(`apps/mobile`, `apps/api`)",
+        "synonyms": ["애플리케이션"]
+      },
+      {
+        "term": "Package",
+        "definition": "App이 소비하는 내부 라이브러리(`packages/schemas`, `packages/typescript-config`, `packages/biome-config`)",
+        "synonyms": ["공통 라이브러리", "내부 패키지"]
+      },
+      {
+        "term": "Schema",
+        "definition": "`packages/schemas`의 zod 와이어 계약 + 추론 타입. DB 테이블 정의가 아님",
+        "synonyms": ["공통 스키마", "와이어 계약"]
+      },
+      {
+        "term": "영속성 스키마",
+        "definition": "drizzle 테이블 정의(`apps/api/src/shared/infrastructure/database/drizzle/schema/`)",
+        "synonyms": ["DB 스키마", "drizzle schema"]
+      },
+      {
+        "term": "DTO",
+        "definition": "class-validator/class-transformer 요청·응답 클래스. `apps/api` presentation 전용, Schema 추론 타입을 implements",
+        "synonyms": ["요청 DTO", "응답 DTO"]
+      },
+      {
+        "term": "Health",
+        "definition": "DB ping을 포함한 API 상태 응답 `{status, timestamp, checks[]}`",
+        "synonyms": ["헬스체크"]
+      },
+      {
+        "term": "Vertical slice",
+        "definition": "한 관심사를 CA 4레이어(domain/application/infrastructure/presentation)로 접은 디렉터리(`src/health/`) — 미래 바운디드 컨텍스트의 템플릿",
+        "synonyms": ["슬라이스", "도메인 디렉터리"]
+      },
+      {
+        "term": "Routing shell",
+        "definition": "`apps/mobile/src/app/` — named re-export만 두는 expo-router 라우트 파일",
+        "synonyms": ["라우트 셸"]
+      },
+      {
+        "term": "Agent doc",
+        "definition": "각 중요 root의 `AGENTS.md`(실체) + `CLAUDE.md`(AGENTS.md를 가리키는 한 줄)",
+        "synonyms": ["에이전트 문서"]
+      }
     ]
   },
   "backend_specifics": {
@@ -393,7 +459,11 @@
     },
     "error_handling": [
       { "code": "HEALTH_DEGRADED", "http": 503, "description": "DB ping 실패" },
-      { "code": "VALIDATION_FAILED", "http": 400, "description": "ValidationPipe whitelist/forbidNonWhitelisted 위반" }
+      {
+        "code": "VALIDATION_FAILED",
+        "http": 400,
+        "description": "ValidationPipe whitelist/forbidNonWhitelisted 위반"
+      }
     ],
     "domain_events": [],
     "external_integrations": []
@@ -415,9 +485,7 @@
       "token_lifecycle": "없음"
     },
     "authorization": [],
-    "data_access_scoping": [
-      { "role": "Developer", "scope": "전체(로컬 개발)" }
-    ]
+    "data_access_scoping": [{ "role": "Developer", "scope": "전체(로컬 개발)" }]
   },
   "nfr": {
     "performance": [
@@ -429,16 +497,9 @@
       "e2e 종료 시 DB 커넥션 풀을 닫아 테스트 프로세스가 hang 없이 종료",
       "DB 실패는 503으로 구분되어 프로세스는 살아있음"
     ],
-    "accessibility": [
-      "이번 phase 목표 없음(단일 화면)"
-    ],
-    "i18n": [
-      "없음(한국어 UI 텍스트 고정)"
-    ],
-    "observability": [
-      "`GET /health`가 유일한 관측 표면",
-      "`checks[].latencyMs`로 DB 지연 노출"
-    ]
+    "accessibility": ["이번 phase 목표 없음(단일 화면)"],
+    "i18n": ["없음(한국어 UI 텍스트 고정)"],
+    "observability": ["`GET /health`가 유일한 관측 표면", "`checks[].latencyMs`로 DB 지연 노출"]
   },
   "tech_stack": {
     "mobile": {
@@ -446,7 +507,11 @@
         { "name": "expo", "version": "~57.0.23", "purpose": "앱 런타임" },
         { "name": "react-native", "version": "0.86.3", "purpose": "네이티브 런타임" },
         { "name": "react", "version": "19.2.3", "purpose": "UI 라이브러리" },
-        { "name": "expo-router", "version": "~57.0.21", "purpose": "파일 기반 라우팅, typed routes" },
+        {
+          "name": "expo-router",
+          "version": "~57.0.21",
+          "purpose": "파일 기반 라우팅, typed routes"
+        },
         { "name": "@shopify/flash-list", "version": "SDK 57 핀 버전(v2)", "purpose": "목록" },
         { "name": "@tanstack/react-query", "version": "^5.102", "purpose": "서버 상태" },
         { "name": "stylo-native", "version": "1.0.0", "purpose": "테마·스타일(순수 JS)" },
@@ -458,12 +523,20 @@
     },
     "backend": {
       "items": [
-        { "name": "@nestjs/core, @nestjs/common, @nestjs/platform-express", "version": "^12.0", "purpose": "API 프레임워크(ESM)" },
+        {
+          "name": "@nestjs/core, @nestjs/common, @nestjs/platform-express",
+          "version": "^12.0",
+          "purpose": "API 프레임워크(ESM)"
+        },
         { "name": "@nestjs/cqrs", "version": "^12", "purpose": "Query 버스" },
         { "name": "@nestjs/config", "version": "^12", "purpose": "env + zod validate" },
         { "name": "drizzle-orm", "version": "~0.45.2", "purpose": "DB 접근" },
         { "name": "postgres", "version": "^3.4", "purpose": "postgres.js 드라이버" },
-        { "name": "drizzle-kit", "version": "~0.31.10", "purpose": "설정만(마이그레이션 Deferred)" },
+        {
+          "name": "drizzle-kit",
+          "version": "~0.31.10",
+          "purpose": "설정만(마이그레이션 Deferred)"
+        },
         { "name": "class-validator", "version": "^0.15", "purpose": "DTO 검증" },
         { "name": "class-transformer", "version": "^0.5", "purpose": "DTO 변환" },
         { "name": "vitest", "version": "^4.1", "purpose": "테스트 러너" },
@@ -498,8 +571,18 @@
       "§7 데이터 모델의 `HealthResponse`/`HealthCheck`는 영속 엔티티가 아니라 와이어 계약의 값 객체다(렌더러가 엔티티 ≥1을 요구해 등록). DB 테이블은 이번 phase에 0개이며, 실제 영속 엔티티는 도메인 확정 후 addendum의 `data_model_patch`로 추가한다"
     ],
     "open_questions": [
-      { "id": "OQ-1", "question": "제품 도메인(Twitter형/Instagram형 등)과 역할 확정", "blocking": "No", "deadline": "첫 도메인 addendum 전" },
-      { "id": "OQ-2", "question": "TypeScript 7 전환 시점(Nest CLI·Expo 템플릿 지원 후)", "blocking": "No", "deadline": "미정" }
+      {
+        "id": "OQ-1",
+        "question": "제품 도메인(Twitter형/Instagram형 등)과 역할 확정",
+        "blocking": "No",
+        "deadline": "첫 도메인 addendum 전"
+      },
+      {
+        "id": "OQ-2",
+        "question": "TypeScript 7 전환 시점(Nest CLI·Expo 템플릿 지원 후)",
+        "blocking": "No",
+        "deadline": "미정"
+      }
     ]
   },
   "appendix": {
@@ -510,8 +593,6 @@
       "Biome 2 big-projects 가이드",
       "stylo-native README(github onepunch-tk/stylo-native)"
     ],
-    "history": [
-      { "date": "2026-09-16", "author": "TaekyungHa", "changes": "bootstrap 초안" }
-    ]
+    "history": [{ "date": "2026-09-16", "author": "TaekyungHa", "changes": "bootstrap 초안" }]
   }
 }

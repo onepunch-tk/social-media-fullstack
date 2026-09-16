@@ -1,0 +1,31 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.13/schema.json",
+  "extends": ["@social/biome-config/biome"],
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "includes": [
+      "**",
+      "!!**/dist",
+      "!!**/.expo",
+      "!!**/coverage",
+      "!!**/expo-env.d.ts",
+      "!!**/.turbo"
+    ]
+  },
+  "overrides": [
+    {
+      "includes": ["apps/api/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useImportType": "off"
+          }
+        }
+      }
+    }
+  ]
+}

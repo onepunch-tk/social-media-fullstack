@@ -1,0 +1,26 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  "globalEnv": ["EXPO_PUBLIC_API_URL", "DATABASE_URL", "PORT", "NODE_ENV"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "lint": {
+      "dependsOn": ["^build"]
+    },
+    "typecheck": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}
