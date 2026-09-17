@@ -1,0 +1,1 @@
+ALTER TABLE "post_counters" DROP COLUMN "updated_at";

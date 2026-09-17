@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import { DRIZZLE } from '#shared/infrastructure/database/drizzle/drizzle.module.js';
+import { DRIZZLE } from '#shared/infrastructure/database/postgres/drizzle.module.js';
 import type {
   DatabasePingPort,
   DatabasePingResult,

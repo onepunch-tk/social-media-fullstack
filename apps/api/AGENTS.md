@@ -25,8 +25,8 @@ apps/api/
 │   │   ├── domain/                                  # 자리 표시
 │   │   └── infrastructure/
 │   │       ├── config/env.schema.ts                 # EnvSchema · Env · validateEnv (zod)
-│   │       ├── database/drizzle/drizzle.module.ts   # @Global DrizzleModule · DRIZZLE 토큰 · DrizzleService(풀 종료)
-│   │       ├── database/drizzle/schema/index.ts     # 영속성 스키마 집결점(현재 테이블 0)
+│   │       ├── database/postgres/drizzle.module.ts   # @Global DrizzleModule · DRIZZLE 토큰 · DrizzleService(풀 종료)
+│   │       ├── database/postgres/schema/index.ts     # 영속성 스키마 집결점(현재 테이블 0)
 │   │       └── filters/                             # 전역 예외 필터 자리
 │   └── health/
 │       ├── application/ports/database-ping.port.ts        # DATABASE_PING + DatabasePingPort
@@ -56,7 +56,7 @@ apps/api/
 2. `src/app.module.ts`의 `imports`에 `{Domain}Module`을 추가한다.
 3. `#{domain}/*` 별칭을 **두 곳**에 추가한다: `tsconfig.json` `paths` → `./src/{domain}/*`,
    `package.json` `imports` → `./dist/{domain}/*`. 한쪽만 두면 typecheck는 통과하고 런타임이 깨진다.
-4. 테이블이 생기면 `src/shared/infrastructure/database/drizzle/schema/{domain-복수형}.schema.ts`를 만들고
+4. 테이블이 생기면 `src/shared/infrastructure/database/postgres/schema/{domain-복수형}.schema.ts`를 만들고
    `schema/index.ts`에서 re-export한다.
 
 ## 명령

@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
 import { HealthModule } from '#health/health.module.js';
 import { validateEnv } from '#shared/infrastructure/config/env.schema.js';
-import { DrizzleModule } from '#shared/infrastructure/database/drizzle/drizzle.module.js';
+import { DrizzleModule } from '#shared/infrastructure/database/postgres/drizzle.module.js';
 
 @Module({
   imports: [
