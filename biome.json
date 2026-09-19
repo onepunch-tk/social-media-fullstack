@@ -19,7 +19,7 @@
   },
   "overrides": [
     {
-      "includes": ["apps/api/**"],
+      "includes": ["apps/api/**/*.controller.ts"],
       "linter": {
         "rules": {
           "style": {

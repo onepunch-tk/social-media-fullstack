@@ -107,5 +107,6 @@ node dist/main.js                            # 빌드 산출물 직접 기동 (c
 - e2e: `test/*.e2e-spec.ts`, 실 `AppModule` 부팅. `createNestApplication()`은 `main.ts`의 파이프를 모르므로
   같은 `ValidationPipe`를 다시 건다. `afterAll`에서 `app.close()` — `DrizzleService.onModuleDestroy`가
   postgres 풀을 `end()`해야 Vitest가 hang 없이 끝난다.
-- 이 디렉터리에 `biome.json`을 두지 마라 — 루트 `biome.json`이 전체를 검사한다(`apps/api/**`는
-  `useImportType` off).
+- 이 디렉터리에 `biome.json`을 두지 마라 — 루트 `biome.json`이 전체를 검사한다. `useImportType`은
+  `*.controller.ts`에서만 off — `@Body() dto: Dto`의 `design:paramtypes`를 safe fix가 `Object`로 만들어
+  `ValidationPipe`가 조용히 꺼진다. 그 밖의 파일은 주입을 `@Inject(토큰)`으로 명시하므로 safe fix가 안전하다.

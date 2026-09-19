@@ -1,5 +1,5 @@
 import { AggregateRoot } from '#shared/domain/aggregate-root.js';
-import { Handle } from '../value-objects/handle.vo.js';
+import type { Handle } from '../value-objects/handle.vo.js';
 import { Name } from '../value-objects/name.vo.js';
 import { ProfileId } from '../value-objects/profile-id.vo.js';
 

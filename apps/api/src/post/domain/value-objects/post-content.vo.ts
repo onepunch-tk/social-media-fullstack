@@ -1,3 +1,5 @@
+import { DomainException } from '#shared/domain/exceptions/domain.exception.js';
+
 export class PostContent {
   private readonly _value: string;
   private static readonly CONTENT_MAX_LENGTH = 280;
@@ -14,11 +16,14 @@ export class PostContent {
     const trimmed = value.trim();
 
     if (!trimmed) {
-      // TODO:  Domain exception 적용
+      throw new DomainException(`게시물의 내용을 작성하세요.`, 'content');
     }
 
     if (trimmed.length > PostContent.CONTENT_MAX_LENGTH) {
-      // TODO:  Domain exception 적용
+      throw new DomainException(
+        `게시물의 내용이 ${PostContent.CONTENT_MAX_LENGTH} 자를 초과합니다.`,
+        'content',
+      );
     }
 
     return new PostContent(trimmed);

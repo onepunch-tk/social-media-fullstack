@@ -22,7 +22,8 @@
     "types": ["vitest/globals", "node"],
     "paths": {
       "#shared/*": ["./src/shared/*"],
-      "#health/*": ["./src/health/*"]
+      "#profile/*": ["./src/profile/*"],
+      "#auth/*": ["./src/auth/*"]
     }
   }
 }

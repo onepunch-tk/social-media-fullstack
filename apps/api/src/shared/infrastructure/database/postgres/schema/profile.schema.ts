@@ -1,8 +1,11 @@
-import { pgTable, text, varchar } from 'drizzle-orm/pg-core';
-import { dateColumns, idColumn } from './common.schema.js';
+import { pgTable, text, uuid, varchar } from 'drizzle-orm/pg-core';
+import { accounts } from './account.schema.js';
+import { dateColumns } from './common.schema.js';
 
 export const profiles = pgTable('profiles', {
-  ...idColumn,
+  id: uuid('id')
+    .primaryKey()
+    .references(() => accounts.id, { onDelete: 'cascade' }),
   handle: varchar('handle', { length: 15 }).notNull().unique(),
   name: varchar('name', { length: 50 }).notNull(),
   avatarUrl: text('avatar_url'),

@@ -42,7 +42,9 @@ export default function HomeScreen() {
   if (query.isError) {
     return (
       <View style={s.container}>
-        <Text style={s.error}>상태를 불러오지 못했습니다: {query.error.message}</Text>
+        <Text style={s.error}>
+          상태를 불러오지 못했습니다: code:{query.error.code} {query.error.message}
+        </Text>
         <Pressable
           style={s.retry}
           onPress={() => {
