@@ -10,9 +10,9 @@ import type { Request, Response } from 'express';
 import {
   type ApplicationErrorCode,
   ApplicationException,
-} from '#shared/domain/exceptions/application.exception.js';
-import { DomainException } from '#shared/domain/exceptions/domain.exception.js';
-import { RequestValidationException } from '../pipes/validation.pipe.js';
+} from '#shared/domain/exceptions/application.exception';
+import { DomainException } from '#shared/domain/exceptions/domain.exception';
+import { RequestValidationException } from '../pipes/validation.pipe';
 
 @Catch()
 export class ApiExceptionFilter implements ExceptionFilter {
@@ -52,9 +52,11 @@ const HTTP_STATUS_TO_CODE: Partial<Record<number, ApiErrorCode>> = {
   403: 'FORBIDDEN',
   404: 'NOT_FOUND',
   409: 'CONFLICT',
+  429: 'TOO_MANY_REQUESTS',
 };
 
 function toApiError(e: unknown): { status: number; body: ApiError } {
+  // Global pipline exception - class validation
   if (e instanceof RequestValidationException) {
     return {
       status: HttpStatus.BAD_REQUEST,
@@ -66,6 +68,7 @@ function toApiError(e: unknown): { status: number; body: ApiError } {
     };
   }
 
+  // Domain layer exception
   if (e instanceof DomainException) {
     return {
       status: HttpStatus.BAD_REQUEST,
@@ -77,6 +80,7 @@ function toApiError(e: unknown): { status: number; body: ApiError } {
     };
   }
 
+  // application exception
   if (e instanceof ApplicationException) {
     return {
       status: APPLICATION_STATUS[e.code],

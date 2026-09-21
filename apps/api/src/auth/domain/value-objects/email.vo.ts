@@ -1,4 +1,4 @@
-import { DomainException } from '#shared/domain/exceptions/domain.exception.js';
+import { DomainException } from '#shared/domain/exceptions/domain.exception';
 
 export class Email {
   private static readonly EMAIL_PATTERN = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

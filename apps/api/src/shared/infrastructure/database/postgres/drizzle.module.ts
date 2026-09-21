@@ -1,10 +1,10 @@
 import type { OnModuleDestroy } from '@nestjs/common';
-import { Global, Inject, Injectable, Module } from '@nestjs/common';
+import { Global, Injectable, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import type { Env } from '../../config/env.schema.js';
+import type { Env } from '../../config/env.schema';
 
 export const DRIZZLE = Symbol('DRIZZLE');
 
@@ -13,7 +13,7 @@ export class DrizzleService implements OnModuleDestroy {
   private readonly client: postgres.Sql;
   private readonly instance: PostgresJsDatabase;
 
-  constructor(@Inject(ConfigService) config: ConfigService<Env, true>) {
+  constructor(config: ConfigService<Env, true>) {
     this.client = postgres(config.get('DATABASE_URL', { infer: true }), { max: 5 });
     this.instance = drizzle(this.client);
   }

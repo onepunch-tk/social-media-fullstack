@@ -1,5 +1,5 @@
 import { pgTable, text, varchar } from 'drizzle-orm/pg-core';
-import { dateColumns, idColumn } from './common.schema.js';
+import { dateColumns, idColumn } from './common.schema';
 
 export const ACCOUNTS_EMAIL_UNIQUE = 'accounts_email_unique';
 

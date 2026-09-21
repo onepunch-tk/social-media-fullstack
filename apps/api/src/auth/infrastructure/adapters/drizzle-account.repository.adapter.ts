@@ -2,19 +2,19 @@ import { Inject, Injectable } from '@nestjs/common';
 import { DrizzleQueryError, eq } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import { DRIZZLE } from '#shared/infrastructure/database/postgres/drizzle.module.js';
+import { DRIZZLE } from '#shared/infrastructure/database/postgres/drizzle.module';
 import {
   ACCOUNTS_EMAIL_UNIQUE,
   accounts,
-} from '#shared/infrastructure/database/postgres/schema/account.schema.js';
+} from '#shared/infrastructure/database/postgres/schema/account.schema';
 import {
   type AccountRepositoryPort,
   DuplicateAccountError,
-} from '../../application/ports/account.repository.port.js';
-import { Account } from '../../domain/entities/account.entity.js';
-import { AccountId } from '../../domain/value-objects/account-id.vo.js';
-import { Email } from '../../domain/value-objects/email.vo.js';
-import { PasswordHash } from '../../domain/value-objects/password-hash.vo.js';
+} from '../../application/ports/account.repository.port';
+import { Account } from '../../domain/entities/account.entity';
+import { AccountId } from '../../domain/value-objects/account-id.vo';
+import { Email } from '../../domain/value-objects/email.vo';
+import { PasswordHash } from '../../domain/value-objects/password-hash.vo';
 
 const UNIQUE_VIOLATION = '23505';
 

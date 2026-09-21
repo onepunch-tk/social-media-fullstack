@@ -1,7 +1,7 @@
-import { AggregateRoot } from '#shared/domain/aggregate-root.js';
-import { PostLikedEvent } from '../events/post-liked.event.js';
-import { PostUnlikedEvent } from '../events/post-unliked.event.js';
-import type { PostId } from '../value-objects/post-id.vo.js';
+import { AggregateRoot } from '#shared/domain/aggregate-root';
+import { PostLikedEvent } from '../events/post-liked.event';
+import { PostUnlikedEvent } from '../events/post-unliked.event';
+import type { PostId } from '../value-objects/post-id.vo';
 
 type LikeProps = {
   profileId: string;

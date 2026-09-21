@@ -1,10 +1,10 @@
 import { Inject } from '@nestjs/common';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import { DRIZZLE } from '#shared/infrastructure/database/postgres/drizzle.module.js';
-import { profiles } from '#shared/infrastructure/database/postgres/schema/profile.schema.js';
-import type { ProfileRepositoryPort } from '../../application/ports/profile.repository.port.js';
-import type { Profile } from '../../domain/entities/profile.entity.js';
-import type { ProfileId } from '../../domain/value-objects/profile-id.vo.js';
+import { DRIZZLE } from '#shared/infrastructure/database/postgres/drizzle.module';
+import { profiles } from '#shared/infrastructure/database/postgres/schema/profile.schema';
+import type { ProfileRepositoryPort } from '../../application/ports/profile.repository.port';
+import type { Profile } from '../../domain/entities/profile.entity';
+import type { ProfileId } from '../../domain/value-objects/profile-id.vo';
 
 export class DrizzleProfileRepositoryAdapter implements ProfileRepositoryPort {
   constructor(@Inject(DRIZZLE) private readonly db: PostgresJsDatabase) {}

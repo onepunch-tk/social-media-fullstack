@@ -3,9 +3,9 @@ import { ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { HealthResponseSchema } from '@social/schemas';
 import request from 'supertest';
-import type { DatabasePingPort } from '#health/application/ports/database-ping.port.js';
-import { DATABASE_PING } from '#health/application/ports/database-ping.port.js';
-import { AppModule } from '../src/app.module.js';
+import type { DatabasePingPort } from '#health/application/ports/database-ping.port';
+import { DATABASE_PING } from '#health/application/ports/database-ping.port';
+import { AppModule } from '../src/app.module';
 
 const validationPipe = new ValidationPipe({
   whitelist: true,

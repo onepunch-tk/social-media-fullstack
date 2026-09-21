@@ -1,11 +1,7 @@
-import {
-  RegisterAccountLimits as L,
-  RegisterAccountMessage as M,
-  type RegisterAccount,
-} from '@social/schemas';
+import { type Account, AccountFieldsLimits as L, AccountFieldsMessage as M } from '@social/schemas';
 import { IsByteLength, IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
-export class RegisterAccountDto implements RegisterAccount {
+export class AccountDto implements Account {
   @IsEmail({}, { message: M.emailInvalid })
   @MaxLength(L.emailMax, { message: M.emailTooLong })
   @IsNotEmpty({ message: M.emailRequired })

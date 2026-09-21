@@ -177,9 +177,9 @@ apps/mobile/
 
 ```tree
 apps/api/
-├── package.json                      # @social/api — "type": "module"; imports #shared/* · #health/* → ./dist/…; scripts build(nest build) · dev · test(vitest) · test:e2e · typecheck · lint(biome) · db:ensure
+├── package.json                      # @social/api — "type": "module"; scripts build(nest build, swc) · dev · test(vitest) · test:e2e · typecheck · lint(biome) · db:ensure
 ├── nest-cli.json
-├── tsconfig.json                     # extends @social/typescript-config/base.json; module/moduleResolution nodenext; emitDecoratorMetadata; types ["vitest/globals","node"]; paths #shared/* · #health/* → ./src/…
+├── tsconfig.json                     # extends @social/typescript-config/base.json; module esnext / moduleResolution bundler; emitDecoratorMetadata; types ["vitest/globals","node"]; paths #shared/* · #health/* → ./src/…
 ├── tsconfig.build.json
 ├── vitest.config.ts                  # 단위 — vite-tsconfig-paths
 ├── vitest.config.e2e.ts              # e2e — vite-tsconfig-paths
@@ -218,7 +218,7 @@ apps/api/
 │   └── main.ts                       # bootstrap: ValidationPipe, shutdown hooks, listen
 ├── test/
 │   └── health.e2e-spec.ts            # 실 DB e2e
-└── dist/                             # nest build 출력 — package.json imports가 가리키는 런타임 경로
+└── dist/                             # nest build(swc) 출력 — 별칭·확장자는 emit 시 재작성됨
 ```
 
 #### CA Layer 매핑 (Layer Map)
@@ -234,8 +234,8 @@ apps/api/
 
 | Alias | 해석 |
 | --- | --- |
-| `#{domain}/*` | `./src/{domain}/* (tsconfig paths) · ./dist/{domain}/* (package.json imports, 런타임) — 도메인 생길 때 양쪽에 추가` |
-| `#shared/*` | `./src/shared/* (tsconfig paths) · ./dist/shared/* (package.json imports, 런타임)` |
+| `#{domain}/*` | `./src/{domain}/* (tsconfig paths — tsc·vitest·swc가 공유) — 도메인 생길 때 추가` |
+| `#shared/*` | `./src/shared/* (tsconfig paths)` |
 
 #### Framework Conventions
 
@@ -269,13 +269,13 @@ apps/api/
 
 ##### ESM 규칙
 
-- `package.json`의 `"type": "module"` + tsconfig `module`/`moduleResolution` `nodenext`.
-- 상대 경로 참조는 소스가 `.ts`여도 **`.js` 확장자를 명시**한다 — Node ESM 해석기가 확장자를 추론하지 않는다.
-- 타입만 쓰는 참조(포트 인터페이스, DTO 타입)는 `import type`으로 가져온다. 주입은 `@Inject(토큰)`으로 명시하며 `emitDecoratorMetadata`의 타입 메타데이터에 기대지 않는다.
+- `package.json`의 `"type": "module"` + tsconfig `module: esnext` / `moduleResolution: bundler`.
+- import에 확장자를 붙이지 않는다. Node ESM 해석기는 확장자를 추론하지 않으므로 `nest build`의 swc 빌더(`.swcrc` `module.resolveFully`)가 emit 시 `.js`를 붙인다.
+- 타입만 쓰는 참조(포트 인터페이스, DTO 타입)는 `import type`으로 가져온다. Symbol 포트는 `@Inject(토큰)`, 클래스(`Reflector`, `ConfigService`, 서비스)는 `emitDecoratorMetadata`의 `design:paramtypes`로 주입한다 — 그래서 Biome `useImportType`은 전역 off다.
 
 ##### 별칭 런타임 해석
 
-- `#shared/*`·`#{domain}/*`는 Node **서브패스 imports**(`#` 접두)다. `@` 접두 대신 `#`인 이유: tsconfig `paths`는 타입체커용이라 런타임 해석을 보장하지 않는데, `package.json` `imports` 필드는 Node·bun 런타임이 표준으로 해석하고 `#`은 npm 스코프(`@`)와 충돌하지 않는다.
+- `#shared/*`·`#{domain}/*`는 tsconfig `paths`에만 선언한다. Nest CLI가 `paths`를 swc `jsc.paths`로 넘겨 emit 시 상대경로로 재작성하므로 `package.json` `imports`는 없다. `#` 접두는 npm 스코프(`@`)와 충돌하지 않아 유지한다.
 - 두 곳을 항상 함께 유지한다: tsconfig `paths` → `./src/…`(tsc·vitest는 vite-tsconfig-paths), `package.json` `imports` → `./dist/…`(런타임, `nest build` 출력).
 - AC는 dist에서 실행한 프로세스가 별칭 경로를 실제로 해석하는지로 검증한다 — 타입체크 통과만으로는 부족하다.
 

@@ -1,7 +1,7 @@
-import { AggregateRoot } from '#shared/domain/aggregate-root.js';
-import type { Handle } from '../value-objects/handle.vo.js';
-import { Name } from '../value-objects/name.vo.js';
-import { ProfileId } from '../value-objects/profile-id.vo.js';
+import { AggregateRoot } from '#shared/domain/aggregate-root';
+import type { Handle } from '../value-objects/handle.vo';
+import { Name } from '../value-objects/name.vo';
+import { ProfileId } from '../value-objects/profile-id.vo';
 
 type ProfileProps = {
   id: ProfileId;

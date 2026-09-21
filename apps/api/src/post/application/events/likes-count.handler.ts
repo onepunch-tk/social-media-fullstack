@@ -1,6 +1,6 @@
 import { EventsHandler, type IEventHandler } from '@nestjs/cqrs';
-import { PostLikedEvent } from '../../domain/events/post-liked.event.js';
-import { PostUnlikedEvent } from '../../domain/events/post-unliked.event.js';
+import { PostLikedEvent } from '../../domain/events/post-liked.event';
+import { PostUnlikedEvent } from '../../domain/events/post-unliked.event';
 
 // TODO: 어떻게 적용해볼지 고민 중... DB를 transaction하면서 카운터를 가져올까..
 @EventsHandler(PostLikedEvent, PostUnlikedEvent)

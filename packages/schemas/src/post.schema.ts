@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ProfileSchema } from './profile.schema.js';
+import { ProfileSchema } from './profile.schema';
 
 export const PostSchema = z.object({
   id: z.uuid(),

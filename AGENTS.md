@@ -59,7 +59,7 @@ bun run --filter <풀네임> <script>       # 예: bun run --filter @social/sche
 
 | 패키지 | build | typecheck | test | 기타 |
 | --- | --- | --- | --- | --- |
-| `@social/schemas` | `tsc -p tsconfig.build.json` | `tsc --noEmit` | `bun test` | `dev`(tsc --watch) |
+| `@social/schemas` | `tsc -p tsconfig.build.json && tsc-alias` | `tsc --noEmit` | `bun test` | `dev`(tsc --watch & tsc-alias --watch) |
 | `@social/api` | `nest build` | `tsc --noEmit -p tsconfig.json` | `vitest run && vitest run --config ./vitest.config.e2e.ts` | `dev`, `test:e2e`, `db:ensure` |
 | `@social/mobile` | — | `expo customize tsconfig.json && tsc --noEmit` | `jest --ci` | `start`/`dev`, `export:web` |
 
@@ -84,7 +84,8 @@ bun run --filter <풀네임> <script>       # 예: bun run --filter @social/sche
 - **루트 `test`는 `turbo run test`** — `bun test`로 바꾸지 마라(jest-expo/vitest 파일을 bun 러너가 잡는다).
   api e2e는 `@social/api`의 `test` 스크립트 안에 포함돼 있으므로 turbo task를 따로 두지 않는다.
 - **`trustedDependencies`를 루트 package.json에 두지 마라** — 명시하면 bun 기본 신뢰 목록을 대체한다.
-  2026-09-16 클린 설치 기준 `bun pm untrusted` 결과는 차단된 lifecycle 스크립트 0건이다.
+  2026-09-22 기준 `bun pm untrusted`에 `@swc/core` postinstall 1건이 차단되지만, 네이티브 바이너리는 optional
+  dependency(`@swc/core-darwin-arm64` 등)로 설치되므로 trust 없이 동작한다.
 - **각 App/Package의 `AGENTS.md`를 먼저 읽어라** — 루트·`apps/mobile`·`apps/api`·`packages/schemas`에
   `AGENTS.md`(실체) + `CLAUDE.md`(한 줄 포인터)가 있다. 설정 전용 패키지는 이 문서가 설명한다.
 

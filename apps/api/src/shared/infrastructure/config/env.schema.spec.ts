@@ -1,4 +1,4 @@
-import { validateEnv } from './env.schema.js';
+import { validateEnv } from './env.schema';
 
 describe('validateEnv', () => {
   it('parses DATABASE_URL and defaults PORT to 3000', () => {

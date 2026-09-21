@@ -11,8 +11,10 @@ NestJS 12 **ESM + Vitest** API. ddd-hexagonal + `@nestjs/cqrs` 수직 슬라이�
 
 ```
 apps/api/
-├── package.json            # type:module · imports #shared/* · #health/* → ./dist/…
-├── tsconfig.json           # extends @social/typescript-config/base.json · nodenext · paths #shared/* · #health/* → ./src/…
+├── package.json            # type:module (별칭 런타임 매핑 없음 — swc가 emit 시 상대경로로 재작성)
+├── nest-cli.json           # builder swc + typeCheck(tsc --noEmit 병행)
+├── .swcrc                  # module es6 + resolveFully(확장자 자동 부여) · jsc.baseUrl .
+├── tsconfig.json           # extends @social/typescript-config/base.json · module esnext · moduleResolution bundler · paths #shared/* · #health/* → ./src/…
 ├── tsconfig.build.json     # rootDir src → dist, spec/test 제외
 ├── vitest.config.ts / vitest.config.e2e.ts   # vite-tsconfig-paths로 별칭 해석
 ├── drizzle.config.ts       # 설정만 — generate/migrate는 이번 phase 범위 밖
@@ -54,8 +56,8 @@ apps/api/
 
 1. `src/{domain}/`을 `src/health/` 모양으로 만든다(도메인이면 `domain/`까지 4레이어 + `{domain}.module.ts`).
 2. `src/app.module.ts`의 `imports`에 `{Domain}Module`을 추가한다.
-3. `#{domain}/*` 별칭을 **두 곳**에 추가한다: `tsconfig.json` `paths` → `./src/{domain}/*`,
-   `package.json` `imports` → `./dist/{domain}/*`. 한쪽만 두면 typecheck는 통과하고 런타임이 깨진다.
+3. `#{domain}/*` 별칭을 `tsconfig.json` `paths`에 추가한다(`./src/{domain}/*`). Nest CLI가 이 `paths`를 swc에
+   넘기므로 emit 시 상대경로 + `.js`로 재작성되고, vitest는 `vite-tsconfig-paths`로 같은 값을 읽는다.
 4. 테이블이 생기면 `src/shared/infrastructure/database/postgres/schema/{domain-복수형}.schema.ts`를 만들고
    `schema/index.ts`에서 re-export한다.
 
@@ -64,7 +66,7 @@ apps/api/
 ```sh
 bun run --filter @social/schemas build       # 선행 — @social/api는 dist를 소비한다
 bun run --filter @social/api db:ensure       # docker postgres에 social_media DB 멱등 생성 (dev·e2e 전)
-bun run --filter @social/api build           # nest build → dist/
+bun run --filter @social/api build           # nest build (swc emit + tsc 타입체크) → dist/
 bun run --filter @social/api dev             # nest start --watch
 bun run --filter @social/api typecheck       # tsc --noEmit -p tsconfig.json (src + test + 설정 파일)
 bun run --filter @social/api lint            # biome check .
@@ -85,13 +87,16 @@ node dist/main.js                            # 빌드 산출물 직접 기동 (c
 
 ## ESM 규칙
 
-- 상대 import는 소스가 `.ts`여도 **`.js` 확장자**를 붙인다. 도메인 안에서는 상대경로, 컨텍스트 경계를
-  넘을 때(`health` → `shared`)만 `#shared/...` 별칭.
+- import에 **확장자를 붙이지 않는다**. tsconfig는 `moduleResolution: bundler`라 확장자 없는 경로를 받아들이고,
+  `nest build`/`nest start --watch`의 swc 빌더가 `.swcrc`의 `module.resolveFully`로 emit 시 `.js`를 붙인다.
+  plain `tsc`로 emit하면 Node ESM에서 깨지므로 빌드는 반드시 Nest CLI로 한다. 도메인 안에서는 상대경로,
+  컨텍스트 경계를 넘을 때(`health` → `shared`)만 `#shared/...` 별칭.
 - 데코레이터 시그니처에 등장하는 인터페이스·타입(`DatabasePingPort`, `PostgresJsDatabase`, `Env`,
   express `Response`)은 **`import type`** — `isolatedModules` + `emitDecoratorMetadata`에서 값 import는
-  TS1272. 반대로 DI 토큰으로 쓰이는 클래스(`QueryBus`, `ConfigService`)는 값 import여야 한다.
-- 별칭은 tsc(`paths`)·vitest(`vite-tsconfig-paths`)·Node 런타임(`package.json` `imports`) 세 곳에서 해석된다.
-  `nest build`는 emit 시 별칭을 상대경로로 재작성하지만 plain `tsc`는 그대로 두므로 `imports`를 지우지 마라.
+  TS1272. 반대로 DI 토큰으로 쓰이는 클래스(`QueryBus`, `ConfigService`, `Reflector`)는 값 import여야 하며,
+  클래스 주입에는 `@Inject`를 붙이지 않는다(`design:paramtypes`로 해석). `@Inject(TOKEN)`은 Symbol 포트 전용.
+- 별칭은 tsc(`paths`)와 vitest(`vite-tsconfig-paths`)가 같은 `paths`를 읽고, 런타임 경로는 swc가 emit 시
+  상대경로로 재작성한다. `package.json` `imports`는 두지 않는다.
 - 패키지 서브패스는 확장자까지 써야 한다(예: `supertest/types`는 ESM에서 해석 실패).
 
 ## 503 정책
@@ -107,6 +112,7 @@ node dist/main.js                            # 빌드 산출물 직접 기동 (c
 - e2e: `test/*.e2e-spec.ts`, 실 `AppModule` 부팅. `createNestApplication()`은 `main.ts`의 파이프를 모르므로
   같은 `ValidationPipe`를 다시 건다. `afterAll`에서 `app.close()` — `DrizzleService.onModuleDestroy`가
   postgres 풀을 `end()`해야 Vitest가 hang 없이 끝난다.
-- 이 디렉터리에 `biome.json`을 두지 마라 — 루트 `biome.json`이 전체를 검사한다. `useImportType`은
-  `*.controller.ts`에서만 off — `@Body() dto: Dto`의 `design:paramtypes`를 safe fix가 `Object`로 만들어
-  `ValidationPipe`가 조용히 꺼진다. 그 밖의 파일은 주입을 `@Inject(토큰)`으로 명시하므로 safe fix가 안전하다.
+- 이 디렉터리에 `biome.json`을 두지 마라 — 루트 `biome.json`이 전체를 검사한다. `useImportType`은 공유
+  규칙(`packages/biome-config/base.json`)에서 전역 off — 켜면 safe fix가 `Reflector`·`ConfigService` 같은
+  DI 클래스와 `@Body() dto: Dto`를 `import type`으로 바꿔 `design:paramtypes`가 `Object`가 되고, DI 해석과
+  `ValidationPipe`가 조용히 깨진다.

@@ -1,4 +1,4 @@
-import { DomainException } from '#shared/domain/exceptions/domain.exception.js';
+import { DomainException } from '#shared/domain/exceptions/domain.exception';
 
 export class PostContent {
   private readonly _value: string;

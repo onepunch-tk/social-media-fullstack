@@ -1,6 +1,6 @@
 import { pgTable, text, uuid, varchar } from 'drizzle-orm/pg-core';
-import { accounts } from './account.schema.js';
-import { dateColumns } from './common.schema.js';
+import { accounts } from './account.schema';
+import { dateColumns } from './common.schema';
 
 export const profiles = pgTable('profiles', {
   id: uuid('id')

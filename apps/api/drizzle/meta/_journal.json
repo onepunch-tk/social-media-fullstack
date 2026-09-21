@@ -43,6 +43,13 @@
       "when": 1789651985553,
       "tag": "0005_striped_robbie_robertson",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1789836727114,
+      "tag": "0006_tidy_agent_zero",
+      "breakpoints": true
     }
   ]
 }

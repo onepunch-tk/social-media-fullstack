@@ -1,6 +1,6 @@
 import { index, integer, pgTable, primaryKey, text, uuid } from 'drizzle-orm/pg-core';
-import { dateColumns, idColumn } from './common.schema.js';
-import { profiles } from './profile.schema.js';
+import { dateColumns, idColumn } from './common.schema';
+import { profiles } from './profile.schema';
 
 export const posts = pgTable('posts', {
   ...idColumn,

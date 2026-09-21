@@ -16,11 +16,11 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json --resolve-full-paths",
     "typecheck": "tsc --noEmit",
     "lint": "biome check .",
     "test": "bun test",
-    "dev": "tsc -p tsconfig.build.json --watch"
+    "dev": "tsc -p tsconfig.build.json --watch & tsc-alias -p tsconfig.build.json --resolve-full-paths --watch"
   },
   "dependencies": {
     "zod": "^4.6.5"
@@ -28,6 +28,7 @@
   "devDependencies": {
     "@social/typescript-config": "workspace:*",
     "@types/bun": "latest",
+    "tsc-alias": "^1.9.5",
     "typescript": "~6.0.3"
   }
 }

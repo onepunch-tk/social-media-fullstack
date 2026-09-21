@@ -1,8 +1,8 @@
-import { AggregateRoot } from '#shared/domain/aggregate-root.js';
-import { AccountRegisteredEvent } from '../events/account-registered.event.js';
-import { AccountId } from '../value-objects/account-id.vo.js';
-import type { Email } from '../value-objects/email.vo.js';
-import { PasswordHash } from '../value-objects/password-hash.vo.js';
+import { AggregateRoot } from '#shared/domain/aggregate-root';
+import { AccountRegisteredEvent } from '../events/account-registered.event';
+import { AccountId } from '../value-objects/account-id.vo';
+import type { Email } from '../value-objects/email.vo';
+import { PasswordHash } from '../value-objects/password-hash.vo';
 
 type AccountProps = {
   id: AccountId;

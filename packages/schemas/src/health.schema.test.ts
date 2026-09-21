@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { type HealthResponse, HealthResponseSchema } from './health.schema.js';
+import { type HealthResponse, HealthResponseSchema } from './health.schema';
 
 const validPayload = {
   status: 'ok',

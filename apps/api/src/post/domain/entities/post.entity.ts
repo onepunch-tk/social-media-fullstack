@@ -1,6 +1,6 @@
-import { AggregateRoot } from '#shared/domain/aggregate-root.js';
-import { PostContent } from '../value-objects/post-content.vo.js';
-import { PostId } from '../value-objects/post-id.vo.js';
+import { AggregateRoot } from '#shared/domain/aggregate-root';
+import { PostContent } from '../value-objects/post-content.vo';
+import { PostId } from '../value-objects/post-id.vo';
 
 type PostProps = {
   id: PostId;

@@ -1,5 +1,5 @@
-import type { Profile } from '../../domain/entities/profile.entity.js';
-import type { ProfileId } from '../../domain/value-objects/profile-id.vo.js';
+import type { Profile } from '../../domain/entities/profile.entity';
+import type { ProfileId } from '../../domain/value-objects/profile-id.vo';
 
 export const PROFILE_REPOSITORY = Symbol('PROFILE_REPOSITORY');
 

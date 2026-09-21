@@ -16,17 +16,5 @@
       "!!**/.turbo",
       "!!apps/mobile/assets"
     ]
-  },
-  "overrides": [
-    {
-      "includes": ["apps/api/**/*.controller.ts"],
-      "linter": {
-        "rules": {
-          "style": {
-            "useImportType": "off"
-          }
-        }
-      }
-    }
-  ]
+  }
 }

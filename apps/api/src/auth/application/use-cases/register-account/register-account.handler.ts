@@ -1,28 +1,30 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, EventPublisher, type ICommandHandler } from '@nestjs/cqrs';
-import { ApplicationException } from '#shared/domain/exceptions/application.exception.js';
-import { Account } from '../../../domain/entities/account.entity.js';
-import { Email } from '../../../domain/value-objects/email.vo.js';
+import { SessionIssuer } from '#auth/application/services/session-issuer.service';
+import { ApplicationException } from '#shared/domain/exceptions/application.exception';
+import { Account } from '../../../domain/entities/account.entity';
+import { Email } from '../../../domain/value-objects/email.vo';
 import {
   ACCOUNT_REPOSITORY,
   type AccountRepositoryPort,
   DuplicateAccountError,
-} from '../../ports/account.repository.port.js';
-import { PASSWORD_HASHER, type PasswordHasherPort } from '../../ports/password-hasher.port.js';
-import { RegisterAccountCommand } from './register-account.command.js';
+} from '../../ports/account.repository.port';
+import { PASSWORD_HASHER, type PasswordHasherPort } from '../../ports/password-hasher.port';
+import { RegisterAccountCommand } from './register-account.command';
 
 @CommandHandler(RegisterAccountCommand)
-export class RegisterAccountHandler implements ICommandHandler<RegisterAccountCommand, void> {
+export class RegisterAccountHandler implements ICommandHandler<RegisterAccountCommand> {
   constructor(
     @Inject(PASSWORD_HASHER) private readonly passwordHasher: PasswordHasherPort,
-    @Inject(ACCOUNT_REPOSITORY) private readonly repository: AccountRepositoryPort,
-    @Inject(EventPublisher) private readonly publisher: EventPublisher,
+    @Inject(ACCOUNT_REPOSITORY) private readonly accountRepository: AccountRepositoryPort,
+    private readonly publisher: EventPublisher,
+    private readonly sessions: SessionIssuer,
   ) {}
 
-  async execute(command: RegisterAccountCommand): Promise<void> {
+  async execute(command: RegisterAccountCommand) {
     const email = Email.create(command.email);
 
-    if (await this.repository.findByEmail(email)) {
+    if (await this.accountRepository.findByEmail(email)) {
       throw duplicateEmail();
     }
 
@@ -30,13 +32,15 @@ export class RegisterAccountHandler implements ICommandHandler<RegisterAccountCo
     const account = this.publisher.mergeObjectContext(Account.register(email, passwordHash));
 
     try {
-      await this.repository.save(account);
+      await this.accountRepository.save(account);
     } catch (e) {
       if (e instanceof DuplicateAccountError) throw duplicateEmail();
       throw e;
     }
 
     account.commit();
+
+    return this.sessions.issue(account.id);
   }
 }
 

@@ -1,6 +1,6 @@
-import type { Account } from '../../domain/entities/account.entity.js';
-import type { AccountId } from '../../domain/value-objects/account-id.vo.js';
-import type { Email } from '../../domain/value-objects/email.vo.js';
+import type { Account } from '../../domain/entities/account.entity';
+import type { AccountId } from '../../domain/value-objects/account-id.vo';
+import type { Email } from '../../domain/value-objects/email.vo';
 
 export const ACCOUNT_REPOSITORY = Symbol('ACCOUNT_REPOSITORY');
 

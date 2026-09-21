@@ -1,4 +1,4 @@
-import { DomainException } from '#shared/domain/exceptions/domain.exception.js';
+import { DomainException } from '#shared/domain/exceptions/domain.exception';
 
 export class PasswordHash {
   private constructor(private readonly _value: string) {}

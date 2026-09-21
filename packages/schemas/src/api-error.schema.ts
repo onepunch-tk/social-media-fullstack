@@ -7,6 +7,7 @@ export const ApiErrorCodeSchema = z.enum([
   'NOT_FOUND', // 404
   'CONFLICT', // 409 유일성 위반
   'INTERNAL_ERROR', // 500 미분류
+  'TOO_MANY_REQUESTS', // 너무 잦은 요청 429
 ]);
 
 export const ApiErrorSchema = z.object({

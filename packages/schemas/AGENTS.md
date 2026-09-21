@@ -23,17 +23,18 @@ packages/schemas/
 ## 명령
 
 ```sh
-bun run --filter @social/schemas build      # tsc -p tsconfig.build.json → dist/
+bun run --filter @social/schemas build      # tsc -p tsconfig.build.json → dist/, 이어서 tsc-alias가 .js 확장자 부여
 bun run --filter @social/schemas typecheck  # tsc --noEmit (테스트 파일 포함)
 bun run --filter @social/schemas test       # bun test
 bun run --filter @social/schemas lint       # biome check .
-bun run --filter @social/schemas dev        # tsc --watch
+bun run --filter @social/schemas dev        # tsc --watch & tsc-alias --watch (둘 다 켜져야 dist가 Node에서 로드됨)
 ```
 
 ## 새 Schema 추가 절차
 
 1. `src/{name}.schema.ts`에 `import * as z from 'zod'`로 스키마를 정의하고 `z.infer` 추론 타입을 함께 export한다.
-2. `src/index.ts`에 `export * from './{name}.schema.js'`를 추가한다 — nodenext ESM이라 `.js` 확장자 필수.
+2. `src/index.ts`에 `export * from './{name}.schema'`를 추가한다 — 확장자는 붙이지 않는다. tsconfig는
+   `moduleResolution: bundler`이고, `build`의 `tsc-alias --resolve-full-paths`가 emit된 `.js`·`.d.ts`에 `.js`를 붙인다.
 3. `src/{name}.schema.test.ts`(`bun:test`)에 유효 payload 성공 + 잘못된 payload 실패 케이스를 쓴다.
 4. `build`로 dist를 갱신한다 — 소비자는 dist만 본다.
 
