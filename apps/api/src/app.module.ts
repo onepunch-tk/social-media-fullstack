@@ -5,6 +5,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AuthModule } from '#auth/auth.module';
+import { ProfileModule } from '#profile/profile.module';
 import { validateEnv } from '#shared/infrastructure/config/env.schema';
 import { DrizzleModule } from '#shared/infrastructure/database/postgres/drizzle.module';
 import { ApiExceptionFilter } from '#shared/infrastructure/filters/api-exception.filter';
@@ -19,6 +20,7 @@ import { PostModule } from './post/post.module';
     ScheduleModule.forRoot(),
     DrizzleModule,
     AuthModule,
+    ProfileModule,
     PostModule,
   ],
   providers: [

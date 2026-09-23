@@ -1,5 +1,5 @@
 import { AggregateRoot } from '#shared/domain/aggregate-root';
-import type { Handle } from '../value-objects/handle.vo';
+import { Handle } from '../value-objects/handle.vo';
 import { Name } from '../value-objects/name.vo';
 import { ProfileId } from '../value-objects/profile-id.vo';
 
@@ -63,9 +63,21 @@ export class Profile extends AggregateRoot {
       updatedAt: now,
     });
 
-    // TODO: Cqrs 이벤트 등록
-
     return profile;
+  }
+
+  static createDefault(profileId: ProfileId): Profile {
+    const handle = Handle.generate();
+    const now = new Date();
+
+    return new Profile({
+      id: profileId,
+      handle,
+      name: Name.create(handle.value),
+      avatarUrl: null,
+      createdAt: now,
+      updatedAt: now,
+    });
   }
 
   static reconstitute(props: ProfileProps): Profile {

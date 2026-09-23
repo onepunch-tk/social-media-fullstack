@@ -1,3 +1,5 @@
+import { randomBytes } from 'node:crypto';
+
 export class Handle {
   private readonly _value: string;
   private static readonly PATTERN = /^[a-z0-9_]{3,15}$/;
@@ -18,6 +20,10 @@ export class Handle {
     }
 
     return new Handle(trimmed);
+  }
+
+  static generate(): Handle {
+    return new Handle(`user_${randomBytes(4).toString('hex')}`);
   }
 
   get value() {
