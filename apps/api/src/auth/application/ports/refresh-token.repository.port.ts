@@ -13,4 +13,5 @@ export interface RefreshTokenRepositoryPort {
   save(token: RefreshToken): Promise<void>;
   findByHash(hash: string): Promise<RefreshToken | null>;
   replace(current: RefreshToken, next: RefreshToken): Promise<void>; // rotation
+  deleteExpired(now: Date): Promise<number>;
 }

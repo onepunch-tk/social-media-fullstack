@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { CqrsModule } from '@nestjs/cqrs';
+import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AuthModule } from '#auth/auth.module';
 import { validateEnv } from '#shared/infrastructure/config/env.schema';
@@ -15,6 +16,7 @@ import { PostModule } from './post/post.module';
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnv }),
     ThrottlerModule.forRoot([{ name: 'default', ttl: 60_000, limit: 60 }]),
     CqrsModule.forRoot(),
+    ScheduleModule.forRoot(),
     DrizzleModule,
     AuthModule,
     PostModule,

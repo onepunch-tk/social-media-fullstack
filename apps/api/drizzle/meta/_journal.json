@@ -50,6 +50,13 @@
       "when": 1789836727114,
       "tag": "0006_tidy_agent_zero",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1790141724603,
+      "tag": "0007_regular_the_call",
+      "breakpoints": true
     }
   ]
 }

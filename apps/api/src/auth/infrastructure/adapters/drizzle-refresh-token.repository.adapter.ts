@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { eq } from 'drizzle-orm';
+import { eq, lte } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import {
   RefreshTokenAlreadyRotatedError,
@@ -41,6 +41,14 @@ export class DrizzleRefreshTokenRepositoryAdapter implements RefreshTokenReposit
         .insert(refreshTokens)
         .values(DrizzleRefreshTokenRepositoryAdapter.toPersistence(next));
     });
+  }
+
+  async deleteExpired(now: Date): Promise<number> {
+    const deleted = await this.db
+      .delete(refreshTokens)
+      .where(lte(refreshTokens.expiresAt, now))
+      .returning({ id: refreshTokens.id });
+    return deleted.length;
   }
 
   private static toPersistence(token: RefreshToken): typeof refreshTokens.$inferInsert {

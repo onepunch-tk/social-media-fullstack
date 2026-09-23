@@ -16,6 +16,7 @@ import { DrizzleRefreshTokenRepositoryAdapter } from './infrastructure/adapters/
 import { JwtAccessTokenSignerAdapter } from './infrastructure/adapters/jwt-access-token-signer.adapter';
 import { AuthController } from './presentation/auth.controller';
 import { AccessTokenGuard } from './presentation/guards/access-token.guard';
+import { RefreshTokenCleanupScheduler } from './presentation/schedulers/refresh-token-cleanup.scheduler';
 
 @Module({
   imports: [JwtModule.register({})],
@@ -24,6 +25,7 @@ import { AccessTokenGuard } from './presentation/guards/access-token.guard';
     ...CommandHandlers,
     ...QueryHandlers,
     SessionIssuer,
+    RefreshTokenCleanupScheduler,
     {
       provide: PASSWORD_HASHER,
       useClass: BcryptPasswordHasherAdapter,
